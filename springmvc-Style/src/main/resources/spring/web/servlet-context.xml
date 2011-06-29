@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/aop 
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd	
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd">
+	<!-- enable Spring AOP support -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<context:component-scan base-package="net.zhepu.web" />
+
+	<mvc:annotation-driven validator="validator" />
+	<mvc:default-servlet-handler />
+	<mvc:resources location="/WEB-INF/js/" mapping="/js/**"
+		cache-period="3600" />
+
+	<mvc:resources location="/WEB-INF/theme/" mapping="/theme/**"
+		cache-period="3600" />
+
+	<mvc:view-controller path="/" view-name="helloworld" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/*" />
+			<bean class="net.zhepu.web.interceptor.Testinterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/*" />
+			<bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor" />
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/*" />
+			<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+		</mvc:interceptor>
+
+
+	</mvc:interceptors>
+
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+				<entry key="xml" value="application/xml" /> <!-- SPR-7504 -->
+			</map>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean class="net.zhepu.json.MappingJacksonJsonView" />
+
+				<bean name="jaxb2MarshallingView"
+					class="org.springframework.web.servlet.view.xml.MarshallingView">
+					<property name="marshaller" ref="jaxbMarshall"></property>
+				</bean>
+				<!-- <bean class="org.springframework.web.servlet.view.xml.MarshallingView"> 
+					<property name="marshaller"> <bean class="org.springframework.oxm.xstream.XStreamMarshaller" 
+					p:autodetectAnnotations="true" /> </property> </bean> -->
+			</list>
+		</property>
+		<property name="ignoreAcceptHeader" value="true" />
+	</bean>
+	<oxm:jaxb2-marshaller id="jaxbMarshall">
+		<oxm:class-to-be-bound name="net.zhepu.web.xmlModel.BeanJaxbA" />
+	</oxm:jaxb2-marshaller>
+	<!-- pdf output setting using ResourceBundleViewResolver -->
+	<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver"
+		p:basename="views" p:order="2" />
+	<!-- excel output setting using XmlViewResolver -->
+	<bean id="excelViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="order" value="3" />
+		<property name="location" value="classpath:views.xml" />
+	</bean>
+
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+	<!-- bean validation -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
+		p:validationMessageSource-ref="messageSource">
+		<description>Enable the bean validation provider, and configure it to
+			use the messageSource when resolving properties</description>
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+		p:fallbackToSystemLocale="true" p:useCodeAsDefaultMessage="false"
+		p:defaultEncoding="UTF-8">
+		<description>Base message source to handle internationalization
+		</description>
+		<property name="basenames">
+			<list>
+				<!-- main resources -->
+				<value>classpath:valid/validation</value>
+				<value>classpath:local/message</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.ui.context.support.ResourceBundleThemeSource"
+		id="themeSource">
+		<property name="basenamePrefix" value="theme."></property>
+	</bean>
+	<!-- <bean class="org.springframework.web.servlet.theme.FixedThemeResolver" 
+		id="themeResolver" p:defaultThemeName="grey" /> -->
+
+	<bean id="themeResolver"
+		class="org.springframework.web.servlet.theme.SessionThemeResolver">
+		<property name="defaultThemeName" value="grey" />
+	</bean>
+
+
+
+	<!-- <bean id="themeResolver" class="org.springframework.web.servlet.theme.CookieThemeResolver"> 
+		<property name="defaultThemeName" value="grey" /> </bean> -->
+
+
+	<!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"> 
+		<property name="cookieName" value="clientlanguage" /> <property name="cookieMaxAge" 
+		value="-1"/> </bean> -->
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+	</bean>
+
+</beans>

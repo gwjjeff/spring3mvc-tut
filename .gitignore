@@ -1,0 +1,8 @@
+*.rar
+/*/target
+/*/.settings
+/*/.classpath
+/*/.project
+/*/*.log*
+*~
+.*.sw*
