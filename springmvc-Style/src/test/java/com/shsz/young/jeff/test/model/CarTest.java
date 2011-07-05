@@ -122,4 +122,8 @@ public class CarTest {
             "Case mode must be UPPER.", 
             constraintViolations.iterator().next().getMessage());
     }
+    @Test
+    public void dummyTest() {
+    	System.getProperties().list(System.out);
+    }
 }

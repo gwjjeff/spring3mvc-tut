@@ -38,8 +38,7 @@ public class MultiAction {
 	// sample url
 	// http://localhost:8080/springmvc/hello3?param1=1&param2=1&param3=1
 
-	@RequestMapping(value = "/hello3", method = RequestMethod.GET, params = {
-			"param1=1", "param2!=2", "param3" }, headers = { "Connection=keep-alive" })
+	@RequestMapping(value = "/hello3", method = RequestMethod.GET, params = { "param1=1", "param2!=2", "param3" }, headers = { "Connection=keep-alive" })
 	public ModelAndView hello3() {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("handlerMethod", "hello3");

@@ -2,7 +2,7 @@ package net.zhepu.web.model;
 
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class User {
 
 	public String getUserName() {

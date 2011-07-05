@@ -1,10 +1,10 @@
 	var cfg = 	{
 	    type: 'POST', 
-	    data: JSON.stringify({userName:'winzip',password:'password',mobileNO:'13818881888'}), 
+	    data: JSON.stringify({userName:'测试用户',password:'password',mobileNO:'13818881888'}), 
 	    dataType: 'json',
 	    contentType:'application/json;charset=UTF-8',	    
 	    success: function(result) { 
-	        alert(result.success); 
+	        alert(result.success + ": " + result.msg); 
 	    } 
 	};
 
@@ -38,7 +38,8 @@ function doTestXML(actionName){
 		    data: xmlDocument, 
 		    dataType: 'xml',
 		    contentType:'application/xml;charset=UTF-8',	    
-		    success: function(result) { 
+		    success: function(result) {
+//		    	console.dir($(result));
 		        alert($(result).text());
 		    } 
 		};	

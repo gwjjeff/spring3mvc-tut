@@ -48,6 +48,7 @@ public class JsonInputTest {
 	@RequestMapping("/json3.json")
 	public JsonResult testJson3(@RequestBody User u) {
 		log.info("handle json output from ContentNegotiatingViewResolver");
+		log.info(u.getUserName());
 		return new JsonResult(true, "return ok");
 	}
 

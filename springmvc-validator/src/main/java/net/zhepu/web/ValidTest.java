@@ -63,12 +63,12 @@ public class ValidTest {
 		}		
 		if (!set.isEmpty()){
 			jsonRst.setSuccess(false);
-			jsonRst.setMsg("输入有误!");
+			jsonRst.setMsg("杈撳叆鏈夎!");
 			return jsonRst;
 		}
 
 		jsonRst.setSuccess(true);
-		jsonRst.setMsg("输入成功!");
+		jsonRst.setMsg("杈撳叆鎴愬姛!");
 		return jsonRst;
 	}
 	
